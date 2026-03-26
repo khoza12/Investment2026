@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Platform</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 { color: #2c3e50; margin-bottom: 0.5rem; }
+        
+        .profile-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border: 3px solid #ecf0f1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .user-name {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #34495e; }
+        .back-btn { background-color: #95a5a6; margin-top: 15px; }
+        .logout-btn { background-color: #e74c3c; margin-top: 20px; }
+
+        .nav-item {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .nav-item:hover { background-color: #e9ecef; }
+
+        .status-box {
+            text-align: left;
+            background: #eef2f3;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 5px solid #2c3e50;
+            border-radius: 4px;
+        }
+
+        .status-box span { font-weight: bold; display: block; color: #7f8c8d; font-size: 0.8rem; }
+        .status-box p { margin: 5px 0 0; font-size: 1.2rem; color: #2c3e50; }
+        .arrears-text { color: #e74c3c; font-weight: bold; font-size: 1.5rem; }
+
+        #progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #progress-fill {
+            height: 20px;
+            width: 0%;
+            background-color: #27ae60;
+            transition: width 0.1s;
+        }
+
+        .license-footer {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #95a5a6;
+            letter-spacing: 1px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-page">
+            <h2>INVESTMENT PLATFORM</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="checkLogin()">Login</button>
+            <p id="error-msg" style="color: red; font-size: 0.8rem;"></p>
+        </div>
+
+        <div id="portal-page" class="hidden">
+            <h2>INVESTMENT PORTAL</h2>
+            <div class="profile-area">
+                <div class="profile-icon">S</div>
+                <div class="user-name">HC MAINTJES</div>
+
+ <div class="user-name"></div>
+
+ 
+            </div>
+            <div class="nav-item" onclick="showSection('status-page')">CHECK OVERALL STATUS</div>
+            <div class="nav-item" onclick="showSection('withdrawal-page')">MAKE WITHDRAWAL</div>
+            <div class="nav-item" onclick="showSection('arrears-page')">CHECK ARREARS</div>
+            <div class="nav-item" onclick="showSection('history-page')">CHECK WITHDRAWAL HISTORY</div>
+            <button class="logout-btn" onclick="logout()">LOG OUT</button>
+        </div>
+
+        <div id="status-page" class="hidden">
+            <h2>OVERALL STATUS</h2>
+            <div class="status-box">
+                <span>CURRENT BALANCE</span>
+                <p>R1,862,262.00</p>
+            </div>
+            <div class="status-box">
+                <span>WITHDRAWABLE AMOUNT</span>
+                <p>R1,862,262.00</p>
+            </div>
+            <button class="back-btn" onclick="showSection('portal-page')">BACK TO PORTAL</button>
+        </div>
+
+        <div id="withdrawal-page" class="hidden">
+            <h2>MAKE WITHDRAWAL</h2>
+            <div id="withdrawal-form">
+                <input type="text" id="w-name" placeholder="NAME">
+                <input type="text" id="w-surname" placeholder="SURNAME">
+                <input type="number" id="w-id" placeholder="ID NUMBER (13 digits)">
+                <select id="bank-select">
+                    <option value="" disabled selected>SELECT BANK NAME</option>
+                    <option value="FNB">FNB</option>
+                    <option value="ABSA">ABSA</option>
+                    <option value="CAPITEC">CAPITEC</option>
+                    <option value="NEDBANK">NEDBANK</option>
+                    <option value="DISCOVERY">DISCOVERY</option>
+                    <option value="STANDARD BANK">STANDARD BANK</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
+                <input type="number" id="w-account" placeholder="BANK ACCOUNT">
+                <input type="number" id="w-ref" placeholder="WITHDRAWAL REFERENCE">
+                <button id="withdraw-btn" style="background-color: #27ae60;" onclick="validateAndLoad()">MAKE WITHDRAWAL</button>
+            </div>
+
+            <div id="progress-container">
+                <p id="loading-text">Processing: 0%</p>
+                <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="resetWithdrawalPage()">BACK TO PORTAL</button>
+        </div>
+
+        <div id="arrears-page" class="hidden">
+            <h2>CURRENT ARREARS</h2>
+            <div class="status-box" style="border-left-color: #e74c3c; text-align: center;">
+                <span>TOTAL ARREARS DUE</span>
+                <p class="arrears-text">R23000.00</p>
+            </div>
+            <p style="font-size: 0.9rem; color: #636e72;">Arrears must be settled before making a withdrawal.</p>
+            <button style="background-color: #f1c40f; color: black;" onclick="talkToAssistant()">SETTLE ARREARS NOW</button>
+            <button class="back-btn" onclick="showSection('portal-page')">BACK TO PORTAL</button>
+        </div>
+
+        <div id="history-page" class="hidden">
+            <h2>WITHDRAWAL HISTORY</h2>
+            <div style="padding: 40px 10px; color: #b2bec3;">
+                <p>No withdrawals have been made in the last 48 hours.</p>
+            </div>
+            <button class="back-btn" onclick="showSection('portal-page')">BACK TO PORTAL</button>
+        </div>
+
+        <div class="license-footer">
+            &copy; 2026 INVESTMENT PLATFORM
+        </div>
+    </div>
+
+    <script>
+        // Function to handle showing different screens
+        function showSection(sectionId) {
+            // List of all section IDs
+            const sections = ['login-page', 'portal-page', 'status-page', 'withdrawal-page', 'arrears-page', 'history-page'];
+            
+            // Hide all
+            sections.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            
+            // Show requested one
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function checkLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === "SH21A" && pass === "12346") {
+                showSection('portal-page');
+            } else {
+                document.getElementById('error-msg').innerText = "Invalid credentials.";
+            }
+        }
+
+        function talkToAssistant() {
+            alert("TALK TO YOUR ASSISTANT FOR FURTHER DETAILS");
+        }
+
+        function validateAndLoad() {
+            const idVal = document.getElementById('w-id').value;
+            if (idVal.length !== 13) {
+                alert("Error: ID Number must be exactly 13 digits.");
+                return;
+            }
+            startLoading();
+        }
+
+        function startLoading() {
+            const form = document.getElementById('withdrawal-form');
+            const progressContainer = document.getElementById('progress-container');
+            const progressFill = document.getElementById('progress-fill');
+            const loadingText = document.getElementById('loading-text');
+
+            form.style.display = 'none';
+            progressContainer.style.display = 'block';
+
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 99) {
+                    clearInterval(interval);
+                    loadingText.innerHTML = '<span style="color: #e74c3c; cursor: pointer; text-decoration: underline;">UNSETTLED ARREARS DETECTED. CLICK HERE TO RESOLVE.</span>';
+                    loadingText.onclick = () => showSection('arrears-page');
+                } else {
+                    width++;
+                    progressFill.style.width = width + '%';
+                    loadingText.innerText = "Processing: " + width + "%";
+                }
+            }, 30);
+        }
+
+        function resetWithdrawalPage() {
+            // Reset the form view for next time
+            document.getElementById('withdrawal-form').style.display = 'block';
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('progress-fill').style.width = '0%';
+            showSection('portal-page');
+        }
+
+        function logout() {
+            location.reload(); 
+        }
+    </script>
+
+</body>
+</html>
